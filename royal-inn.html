@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Royal Inn – Hotel & Restaurant</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C8922A;
+    --gold-light: #E8B84B;
+    --dark: #1a1208;
+    --cream: #fdf8f0;
+    --white: #ffffff;
+    --gray: #6b6b6b;
+    --light-gray: #f5f5f5;
+    --border: #e8e0d0;
+    --red-dot: #e74c3c;
+    --green-dot: #27ae60;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--white);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--white);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 48px;
+    box-shadow: 0 2px 16px rgba(0,0,0,.07);
+    animation: slideDown .6s ease both;
+  }
+  @keyframes slideDown { from { transform: translateY(-100%); opacity:0; } to { transform: none; opacity:1; } }
+
+  .logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .logo-icon { font-size:28px; color:var(--gold); }
+  .logo-text { line-height:1.1; }
+  .logo-text span:first-child { display:block; font-family:'Playfair Display',serif; font-size:20px; font-weight:900; color:var(--dark); letter-spacing:2px; }
+  .logo-text span:last-child { font-size:10px; letter-spacing:3px; color:var(--gray); text-transform:uppercase; }
+
+  .nav-links { display:flex; gap:32px; list-style:none; }
+  .nav-links a { text-decoration:none; color:var(--dark); font-size:14px; font-weight:700; letter-spacing:.5px; position:relative; padding-bottom:4px; transition:color .3s; }
+  .nav-links a::after { content:''; position:absolute; bottom:0; left:0; width:0; height:2px; background:var(--gold); transition:width .3s; }
+  .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
+  .nav-links a.active { color:var(--gold); }
+
+  .btn-book {
+    background:var(--gold); color:var(--white); border:none; padding:10px 22px;
+    border-radius:6px; font-size:14px; font-weight:700; cursor:pointer;
+    display:flex; align-items:center; gap:8px; letter-spacing:.5px;
+    transition: background .3s, transform .2s, box-shadow .3s;
+    text-decoration:none;
+  }
+  .btn-book:hover { background:var(--gold-light); transform:translateY(-2px); box-shadow:0 8px 24px rgba(200,146,42,.35); }
+
+  /* ── HERO ── */
+  .hero {
+    position:relative; height:380px; display:flex; align-items:center; justify-content:center;
+    text-align:center; overflow:hidden;
+    background: linear-gradient(135deg, #1a0e00 0%, #3a2000 40%, #2a1500 100%);
+  }
+  .hero-bg {
+    position:absolute; inset:0;
+    background: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1400&q=80') center/cover;
+    opacity:.35;
+    animation: zoomIn 8s ease infinite alternate;
+  }
+  @keyframes zoomIn { from { transform:scale(1); } to { transform:scale(1.08); } }
+  .hero-overlay { position:absolute; inset:0; background:linear-gradient(to bottom, rgba(26,8,0,.55), rgba(26,8,0,.75)); }
+  .hero-content { position:relative; z-index:2; }
+  .hero-tag {
+    font-size:12px; letter-spacing:4px; color:var(--gold-light); text-transform:uppercase;
+    display:flex; align-items:center; gap:10px; justify-content:center; margin-bottom:14px;
+    animation: fadeUp .8s .3s ease both;
+  }
+  .hero-tag::before, .hero-tag::after { content:''; width:36px; height:1px; background:var(--gold-light); }
+  .hero h1 {
+    font-family:'Playfair Display',serif; font-size:clamp(36px,6vw,64px); font-weight:900; color:var(--white);
+    line-height:1.1; margin-bottom:16px;
+    animation: fadeUp .8s .5s ease both;
+  }
+  .hero p {
+    color:rgba(255,255,255,.75); font-size:16px; max-width:480px; line-height:1.7;
+    animation: fadeUp .8s .7s ease both;
+  }
+  @keyframes fadeUp { from { transform:translateY(28px); opacity:0; } to { transform:none; opacity:1; } }
+
+  /* ── FILTER TABS ── */
+  .filter-bar {
+    display:flex; justify-content:center; gap:8px; padding:30px 48px 20px;
+    background:var(--white); flex-wrap:wrap;
+    animation: fadeUp .6s .2s ease both;
+  }
+  .tab {
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    padding:14px 22px; border-radius:12px; cursor:pointer;
+    border:2px solid transparent; transition: all .25s; background:var(--light-gray);
+  }
+  .tab.active { border-color:var(--gold); background:var(--cream); }
+  .tab-icon { font-size:22px; }
+  .tab span { font-size:13px; font-weight:700; color:var(--gray); letter-spacing:.5px; }
+  .tab.active span { color:var(--gold); }
+  .tab:hover { border-color:var(--gold-light); transform:translateY(-2px); }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    text-align:center; padding:32px 0 8px;
+    animation: fadeUp .6s ease both;
+  }
+  .section-title h2 { font-family:'Playfair Display',serif; font-size:36px; font-weight:900; }
+  .title-divider {
+    display:flex; align-items:center; justify-content:center; gap:12px; margin:10px 0 28px;
+  }
+  .title-divider::before, .title-divider::after { content:''; flex:1; max-width:80px; height:1.5px; background:var(--gold); }
+  .chef-icon { font-size:18px; color:var(--gold); }
+
+  /* ── MENU GRID ── */
+  .menu-grid {
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(380px, 1fr));
+    gap:20px; padding:0 48px 60px; max-width:1200px; margin:0 auto;
+  }
+
+  .menu-card {
+    display:flex; gap:16px; padding:18px; border-radius:14px;
+    border:1.5px solid var(--border); background:var(--white);
+    transition: transform .3s, box-shadow .3s, border-color .3s;
+    opacity:0; animation: cardIn .5s ease both;
+  }
+  .menu-card:hover { transform:translateY(-5px); box-shadow:0 16px 40px rgba(0,0,0,.1); border-color:var(--gold-light); }
+
+  @keyframes cardIn { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:none; } }
+  .menu-card:nth-child(1) { animation-delay:.05s }
+  .menu-card:nth-child(2) { animation-delay:.1s }
+  .menu-card:nth-child(3) { animation-delay:.15s }
+  .menu-card:nth-child(4) { animation-delay:.2s }
+  .menu-card:nth-child(5) { animation-delay:.25s }
+  .menu-card:nth-child(6) { animation-delay:.3s }
+  .menu-card:nth-child(7) { animation-delay:.35s }
+  .menu-card:nth-child(8) { animation-delay:.4s }
+
+  .card-img {
+    width:120px; height:110px; border-radius:10px; object-fit:cover; flex-shrink:0;
+    transition: transform .4s;
+  }
+  .menu-card:hover .card-img { transform:scale(1.06); }
+
+  .card-body { flex:1; display:flex; flex-direction:column; gap:5px; }
+  .card-header { display:flex; justify-content:space-between; align-items:flex-start; }
+  .card-name { font-family:'Playfair Display',serif; font-size:17px; font-weight:700; }
+  .card-price { font-size:16px; font-weight:700; color:var(--gold); white-space:nowrap; }
+  .card-desc { font-size:13px; color:var(--gray); line-height:1.6; }
+  .veg-tag { display:flex; align-items:center; gap:5px; font-size:12px; font-weight:700; color:var(--gray); }
+  .veg-dot { width:9px; height:9px; border-radius:50%; }
+  .veg-dot.veg { background:var(--green-dot); }
+  .veg-dot.non-veg { background:var(--red-dot); }
+
+  .card-actions { display:flex; gap:10px; margin-top:6px; }
+  .btn-order {
+    background:var(--gold); color:var(--white); border:none; border-radius:7px;
+    padding:8px 16px; font-size:13px; font-weight:700; cursor:pointer;
+    display:flex; align-items:center; gap:6px; letter-spacing:.3px;
+    transition: background .3s, transform .2s, box-shadow .3s;
+  }
+  .btn-order:hover { background:var(--gold-light); transform:scale(1.04); box-shadow:0 6px 18px rgba(200,146,42,.35); }
+  .btn-wish {
+    background:transparent; border:1.5px solid var(--border); border-radius:7px;
+    width:36px; height:36px; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; font-size:15px; color:var(--gray);
+    transition: border-color .3s, color .3s, transform .2s;
+  }
+  .btn-wish:hover { border-color:#e74c3c; color:#e74c3c; transform:scale(1.1); }
+  .btn-wish.liked { border-color:#e74c3c; color:#e74c3c; }
+
+  /* ── CTA BANNER ── */
+  .cta-banner {
+    margin:0 48px 60px; border-radius:18px; padding:40px 48px;
+    background:var(--cream); border:1.5px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between; gap:24px;
+    flex-wrap:wrap;
+    animation: fadeUp .6s ease both;
+  }
+  .cta-icon-wrap {
+    width:72px; height:72px; background:var(--white); border-radius:50%;
+    border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center;
+    font-size:32px; flex-shrink:0;
+  }
+  .cta-text h3 { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; }
+  .cta-text p { color:var(--gray); font-size:14px; margin-top:4px; }
+  .cta-actions { display:flex; gap:14px; flex-wrap:wrap; }
+  .btn-outline {
+    background:transparent; color:var(--dark); border:1.5px solid var(--dark); border-radius:8px;
+    padding:12px 24px; font-size:14px; font-weight:700; cursor:pointer;
+    display:flex; align-items:center; gap:8px; transition: all .25s;
+    text-decoration:none;
+  }
+  .btn-outline:hover { border-color:var(--gold); color:var(--gold); transform:translateY(-2px); }
+  .cta-deco { font-size:64px; opacity:.15; position:absolute; right:200px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background:var(--dark); color:#ccc; padding:52px 48px 24px;
+  }
+  .footer-grid { display:grid; grid-template-columns:1.5fr 1fr 1.2fr 1.2fr; gap:40px; margin-bottom:40px; }
+  .footer-logo-area .logo-text span:first-child { color:var(--gold-light); }
+  .footer-logo-area .logo-text span:last-child { color:#aaa; }
+  .footer-logo-area p { font-size:13px; color:#aaa; margin-top:12px; line-height:1.7; max-width:200px; }
+  .social-links { display:flex; gap:10px; margin-top:16px; }
+  .social-links a {
+    width:34px; height:34px; border-radius:50%; border:1.5px solid #444;
+    display:flex; align-items:center; justify-content:center; color:#aaa; text-decoration:none;
+    font-size:14px; transition: border-color .25s, color .25s, transform .2s;
+  }
+  .social-links a:hover { border-color:var(--gold); color:var(--gold); transform:scale(1.1); }
+
+  .footer-col h4 { color:var(--white); font-size:15px; font-weight:700; margin-bottom:16px; letter-spacing:.5px; }
+  .footer-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .footer-col ul li a { color:#aaa; text-decoration:none; font-size:14px; transition:color .25s; }
+  .footer-col ul li a:hover { color:var(--gold-light); }
+  .contact-item { display:flex; align-items:flex-start; gap:10px; font-size:14px; color:#aaa; margin-bottom:12px; }
+  .contact-item span.icon { color:var(--gold); font-size:16px; margin-top:1px; }
+  .hours-row { display:flex; align-items:center; gap:8px; font-size:14px; color:#aaa; }
+  .hours-row span.icon { color:var(--gold); }
+
+  .footer-bottom { border-top:1px solid #333; padding-top:20px; text-align:center; color:#555; font-size:13px; }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal { opacity:0; transform:translateY(30px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.visible { opacity:1; transform:none; }
+
+  /* ripple */
+  @keyframes ripple { 0%{transform:scale(0);opacity:.4} 100%{transform:scale(2.5);opacity:0} }
+  .ripple-btn { position:relative; overflow:hidden; }
+  .ripple-btn::after { content:''; position:absolute; inset:0; background:rgba(255,255,255,.25); border-radius:inherit; transform:scale(0); }
+  .ripple-btn:active::after { animation:ripple .4s ease; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <span class="logo-icon">👑</span>
+    <div class="logo-text">
+      <span>ROYAL INN</span>
+      <span>HOTEL &amp; RESTAURANT</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">About Us</a></li>
+    <li><a href="#">Rooms</a></li>
+    <li><a href="#menu" class="active">Menu</a></li>
+    <li><a href="#">Gallery</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <a href="#book" class="btn-book ripple-btn">📅 Book a Table</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-tag">OUR MENU</div>
+    <h1>Delicious Food,<br>Great Moments</h1>
+    <p>Experience a perfect blend of taste, quality and hospitality with our specially curated menu.</p>
+  </div>
+</section>
+
+<!-- FILTER TABS -->
+<div class="filter-bar" id="menu">
+  <div class="tab active" onclick="filterMenu('all', this)">
+    <span class="tab-icon">🍽️</span><span>All</span>
+  </div>
+  <div class="tab" onclick="filterMenu('breakfast', this)">
+    <span class="tab-icon">☕</span><span>Breakfast</span>
+  </div>
+  <div class="tab" onclick="filterMenu('starters', this)">
+    <span class="tab-icon">🥣</span><span>Starters</span>
+  </div>
+  <div class="tab" onclick="filterMenu('main', this)">
+    <span class="tab-icon">🥘</span><span>Main Course</span>
+  </div>
+  <div class="tab" onclick="filterMenu('beverages', this)">
+    <span class="tab-icon">🥤</span><span>Beverages</span>
+  </div>
+  <div class="tab" onclick="filterMenu('desserts', this)">
+    <span class="tab-icon">🍰</span><span>Desserts</span>
+  </div>
+</div>
+
+<!-- SECTION TITLE -->
+<div class="section-title reveal">
+  <h2>Our Special Menu</h2>
+  <div class="title-divider"><span class="chef-icon">👨‍🍳</span></div>
+</div>
+
+<!-- MENU GRID -->
+<div class="menu-grid" id="menuGrid">
+
+  <div class="menu-card" data-cat="breakfast">
+    <img class="card-img" src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=300&q=80" alt="Classic Pancakes">
+    <div class="card-body">
+      <div class="card-header">
+        <span class="card-name">Classic Pancakes</span>
+        <span class="card-price">₹199</span>
+      </div>
+      <p class="card-desc">Fluffy pancakes served with maple syrup, butter and fresh fruits.</p>
+      <div class="veg-tag"><span class="veg-dot veg"></span> Veg</div>
+      <div class="card-actions">
+        <button class="btn-order ripple-btn">🛒 Order Now</button>
+        <button class="btn-wish" onclick="toggleWish(this)">♡</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-card" data-cat="starters">
+    <img class="card-img" src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=300&q=80" alt="Tomato Basil Soup">
+    <div class="card-body">
+      <div class="card-header">
+        <span class="card-name">Tomato Basil Soup</span>
+        <span class="card-price">₹149</span>
+      </div>
+      <p class="card-desc">Creamy tomato soup flavored with fresh basil and herbs.</p>
+      <div class="veg-tag"><span class="veg-dot veg"></span> Veg</div>
+      <div class="card-actions">
+        <button class="btn-order ripple-btn">🛒 Order Now</button>
+        <button class="btn-wish" onclick="toggleWish(this)">♡</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-card" data-cat="starters">
+    <img class="card-img" src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=300&q=80" alt="Paneer Tikka">
+    <div class="card-body">
+      <div class="card-header">
+        <span class="card-name">Paneer Tikka</span>
+        <span class="card-price">₹249</span>
+      </div>
+      <p class="card-desc">Cottage cheese marinated in spices and grilled to perfection.</p>
+      <div class="veg-tag"><span class="veg-dot veg"></span> Veg</div>
+      <div class="card-actions">
+        <button class="btn-order ripple-btn">🛒 Order Now</button>
+        <button class="btn-wish" onclick="toggleWish(this)">♡</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-card" data-cat="main">
+    <img class="card-img" src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=300&q=80" alt="Chicken Tandoori">
+    <div class="card-body">
+      <div class="card-header">
+        <span class="card-name">Chicken Tandoori</span>
+        <span class="card-price">₹299</span>
+      </div>
+      <p class="card-desc">Tender chicken marinated in yogurt and spices, roasted in tandoor.</p>
+      <div class="veg-tag"><span class="veg-dot non-veg"></span> Non-Veg</div>
+      <div class="card-actions">
+        <button class="btn-order ripple-btn">🛒 Order Now</button>
+        <button class="btn-wish" onclick="toggleWish(this)">♡</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-card" data-cat="main">
+    <img class="card-img" src="https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=300&q=80" alt="Butter Chicken">
+    <div class="card-body">
+      <div class="card-header">
+        <span class="card-name">Butter Chicken</span>
+        <span class="card-price">₹349</span>
+      </div>
+      <p class="card-desc">Classic chicken in rich buttery tomato gravy with Indian spices.</p>
+      <div class="veg-tag"><span class="veg-dot non-veg"></span> Non-Veg</div>
+      <div class="card-actions">
+        <button class="btn-order ripple-btn">🛒 Order Now</button>
+        <button class="btn-wish" onclick="toggleWish(this)">♡</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-card" data-cat="main">
+    <img class="card-img" src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300&q=80" alt="Veg Biryani">
+    <div class="card-body">
+      <div class="card-header">
+        <span class="card-name">Veg Biryani</span>
+        <span class="card-price">₹279</span>
+      </div>
+      <p class="card-desc">Aromatic basmati rice cooked with mixed vegetables and spices.</p>
+      <div class="veg-tag"><span class="veg-dot veg"></span> Veg</div>
+      <div class="card-actions">
+        <button class="btn-order ripple-btn">🛒 Order Now</button>
+        <button class="btn-wish" onclick="toggleWish(this)">♡</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-card" data-cat="beverages">
+    <img class="card-img" src="https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=300&q=80" alt="Mint Mojito">
+    <div class="card-body">
+      <div class="card-header">
+        <span class="card-name">Mint Mojito</span>
+        <span class="card-price">₹129</span>
+      </div>
+      <p class="card-desc">Refreshing blend of mint, lime, sugar and soda.</p>
+      <div class="veg-tag"><span class="veg-dot veg"></span> Veg</div>
+      <div class="card-actions">
+        <button class="btn-order ripple-btn">🛒 Order Now</button>
+        <button class="btn-wish" onclick="toggleWish(this)">♡</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-card" data-cat="desserts">
+    <img class="card-img" src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=300&q=80" alt="Chocolate Lava Cake">
+    <div class="card-body">
+      <div class="card-header">
+        <span class="card-name">Chocolate Lava Cake</span>
+        <span class="card-price">₹179</span>
+      </div>
+      <p class="card-desc">Warm chocolate cake with a gooey molten center.</p>
+      <div class="veg-tag"><span class="veg-dot veg"></span> Veg</div>
+      <div class="card-actions">
+        <button class="btn-order ripple-btn">🛒 Order Now</button>
+        <button class="btn-wish" onclick="toggleWish(this)">♡</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CTA BANNER -->
+<div class="cta-banner reveal" id="book" style="position:relative; overflow:hidden;">
+  <div class="cta-icon-wrap">🍽️</div>
+  <div class="cta-text">
+    <h3>Hungry? We're Ready to Serve You!</h3>
+    <p>Visit our restaurant for a delightful dining experience.</p>
+  </div>
+  <div class="cta-actions">
+    <a href="#" class="btn-book ripple-btn">📅 Book a Table →</a>
+    <a href="#menu" class="btn-outline">📖 View Full Menu →</a>
+  </div>
+  <div style="position:absolute;right:180px;top:50%;transform:translateY(-50%);font-size:80px;opacity:.07;">🛎️</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-logo-area">
+      <div class="logo">
+        <span class="logo-icon">👑</span>
+        <div class="logo-text">
+          <span>ROYAL INN</span>
+          <span>HOTEL &amp; RESTAURANT</span>
+        </div>
+      </div>
+      <p>Luxury stay, delicious food and unforgettable experiences.</p>
+      <div class="social-links">
+        <a href="#">f</a>
+        <a href="#">📷</a>
+        <a href="#">🐦</a>
+        <a href="#">📱</a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Rooms</a></li>
+        <li><a href="#">Menu</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Contact Us</h4>
+      <div class="contact-item"><span class="icon">📞</span><span>+91 98765 43210</span></div>
+      <div class="contact-item"><span class="icon">✉️</span><span>info@royalinn.com</span></div>
+      <div class="contact-item"><span class="icon">📍</span><span>123, MG Road,<br>Bangalore, India – 560001</span></div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Opening Hours</h4>
+      <div class="hours-row"><span class="icon">🕐</span><span>Mon – Sun</span></div>
+      <div style="margin-top:6px; color:#aaa; font-size:14px;">7:00 AM – 11:00 PM</div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2024 Royal Inn Hotel &amp; Restaurant. All Rights Reserved.
+  </div>
+</footer>
+
+<script>
+  // Filter tabs
+  function filterMenu(cat, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    const cards = document.querySelectorAll('.menu-card');
+    cards.forEach((card, i) => {
+      const show = cat === 'all' || card.dataset.cat === cat;
+      if (show) {
+        card.style.display = 'flex';
+        card.style.animationDelay = (i * 0.07) + 's';
+        card.style.animation = 'none';
+        void card.offsetWidth;
+        card.style.animation = 'cardIn .45s ease both';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  // Wishlist toggle
+  function toggleWish(btn) {
+    btn.classList.toggle('liked');
+    btn.textContent = btn.classList.contains('liked') ? '♥' : '♡';
+  }
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+
+  // Order button pop
+  document.querySelectorAll('.btn-order').forEach(btn => {
+    btn.addEventListener('click', function () {
+      this.textContent = '✓ Added!';
+      this.style.background = '#27ae60';
+      setTimeout(() => {
+        this.innerHTML = '🛒 Order Now';
+        this.style.background = '';
+      }, 1500);
+    });
+  });
+</script>
+</body>
+</html>
